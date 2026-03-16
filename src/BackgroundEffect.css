@@ -1,0 +1,23 @@
+
+
+.background-effect {
+  position: fixed;
+  top: 100px; /* height of navbar */
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 100px);
+  z-index: 0;
+  pointer-events: none;
+  background-size: cover, contain;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  filter: blur(0px);
+  transform: scale(1);
+  transition: filter 0.2s, transform 0.2s;
+  opacity: 0.5;
+}
+
+body, #root {
+  position: relative;
+  z-index: 1;
+}

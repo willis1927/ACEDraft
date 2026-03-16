@@ -1,0 +1,118 @@
+/* Import Montserrat and Open Sans from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap');
+
+
+:root {
+  /* Light theme colors */
+  --primary: #F1E219;
+  --primary-dark: #F1E219;
+  --dark-bg: #1a1a1a;
+  --light-bg: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-light: #666;
+  --border: #e0e0e0;
+  --hover-bg: rgba(0, 191, 255, 0.1);
+
+
+  --heading-font: 'Montserrat', Arial, Helvetica, sans-serif;
+  --body-font: 'Open Sans', Arial, Helvetica, sans-serif;
+  
+  --sans: var(--body-font);
+  --heading: var(--heading-font);
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text-dark);
+  background: var(--light-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #081848;
+    --primary-dark: #081848;
+    --dark-bg: #0a0a0a;
+    --light-bg: #1a1a1a;
+    --text-dark: #ffffff;
+    --text-light: #999;
+    --border: #333;
+    --hover-bg: rgba(0, 191, 255, 0.15);
+  }
+}
+
+
+#root {
+  /* width: 1126px; */
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  border-inline: 1px solid var(--border);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--body-font);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--heading-font);
+  font-weight: 700;
+}
+
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
