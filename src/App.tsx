@@ -2,59 +2,121 @@
 import { Navbar, Section, Card } from './components'
 import './App.css'
 import BackgroundEffect from './BackgroundEffect'
+import { useEffect, useState, useRef } from 'react'
+
+
+function getRelativeTime(publishedAt: string): string {
+  const now = new Date();
+  const uploadDate = new Date(publishedAt);
+  const diffMs = now.getTime() - uploadDate.getTime();
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMinutes < 60) {
+    return diffMinutes === 1 ? '1 minute ago' : `${diffMinutes} minutes ago`;
+  } else if (diffHours < 24) {
+    return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+  } else {
+    return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
+  }
+}
+
+async function getAceNationVidoes(pageToken?: string) {
+  let apiKey = "AIzaSyAFBsK7cuGZl7GhuQvzLmbUuCgDEOyuI7I";
+  let uploadsPlaylistId = "UUTfW_DZQZCIujgV_nBA13IA";
+  
+  const pageParam = pageToken ? `&pageToken=${pageToken}` : '';
+  const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${uploadsPlaylistId}&maxResults=8&key=${apiKey}${pageParam}`;
+  
+  const res = await fetch(url);
+  const data = await res.json();
+
+  return { items: data.items, nextPageToken: data.nextPageToken || null };
+}
+
 
 function App() {
+
+  const [videos, setVideos] = useState([]);
+  const [nextPageToken, setNextPageToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const loadMoreVideos = async () => {
+    if (isLoading || !nextPageToken) return;
+    setIsLoading(true);
+    try {
+      const data = await getAceNationVidoes(nextPageToken);
+      setVideos(prev => [...prev, ...data.items]);
+      setNextPageToken(data.nextPageToken);
+    } catch (error) {
+      console.error('Error loading more videos:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // Initial load
+    getAceNationVidoes().then(data => {
+      setVideos(data.items);
+      setNextPageToken(data.nextPageToken);
+      setInitialLoadDone(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    // Only setup scroll listener after initial load is complete
+    if (!initialLoadDone || !gridRef.current) return;
+
+    const handleScroll = () => {
+      const scrollElement = gridRef.current;
+      if (!scrollElement) return;
+
+      const scrollPosition = scrollElement.scrollLeft + scrollElement.clientWidth;
+      const scrollWidth = scrollElement.scrollWidth;
+      
+      // Trigger when user is within 500px of right edge (for horizontal scroll)
+      if (scrollPosition >= scrollWidth - 500 && nextPageToken && !isLoading) {
+        loadMoreVideos();
+      }
+    };
+
+    const scrollElement = gridRef.current;
+    scrollElement.addEventListener('scroll', handleScroll);
+
+    return () => {
+      scrollElement.removeEventListener('scroll', handleScroll);
+    };
+  }, [initialLoadDone, nextPageToken, isLoading, loadMoreVideos]);
   return (
+    
     <>
       <BackgroundEffect />
       <Navbar />
       
       <main style={{ marginTop: '100px' }}>
         <h1 className="pageTitle">ACE Podcast Nation</h1>
-        {/* Events Section */}
+        {/* YouTube Section */}
         <Section
-          id="events"
-          title="Events"
+          id="Cardiff City World"
+          title="Cardiff City World"
           subtitle="Stay updated with our latest podcast events and episodes"
           icon="🎙️"
         >
-          <div className="grid">
-            <Card
-              title="Upcoming Live Recording"
-              description="Join us for our next live recording session where we discuss the latest trends in sports and entertainment."
-              image="📹"
-              cta={{ text: 'Learn More', href: '#' }}
-            />
-            <Card
-              title="Special Guest Episode"
-              description="Featuring industry experts and influencers sharing their insights and experiences."
-              image="⭐"
-              cta={{ text: 'Register', href: '#' }}
-            />
-            <Card
-              title="Monthly Meetup"
-              description="Connect with fellow podcast enthusiasts and network with our community members."
-              image="👥"
-              cta={{ text: 'Join Us', href: '#' }}
-            />
-            <Card
-              title="Upcoming Live Recording"
-              description="Join us for our next live recording session where we discuss the latest trends in sports and entertainment."
-              image="📹"
-              cta={{ text: 'Learn More', href: '#' }}
-            />
-            <Card
-              title="Upcoming Live Recording"
-              description="Join us for our next live recording session where we discuss the latest trends in sports and entertainment."
-              image="📹"
-              cta={{ text: 'Learn More', href: '#' }}
-            />
-            <Card
-              title="Upcoming Live Recording"
-              description="Join us for our next live recording session where we discuss the latest trends in sports and entertainment."
-              image="📹"
-              cta={{ text: 'Learn More', href: '#' }}
-            />
+          <div className="grid" ref={gridRef}>
+            {videos.map((video) => (
+              <Card
+                key={video.id}
+                title={video.snippet.title}
+                description= ""//{video.snippet.description}
+                image={video.snippet.thumbnails.high.url}
+                cta={{ text: 'Watch Now', href: `https://www.youtube.com/watch?v=${video.snippet.resourceId.videoId}` }}
+                uploadDate={getRelativeTime(video.snippet.publishedAt)}
+              />
+            ))}
           </div>
         </Section>
 

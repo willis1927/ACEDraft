@@ -57,6 +57,14 @@
 .cta:hover {
   color: #0099cc;
 }
+
+.image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
 .card {
   background: white;
   border-radius: 8px;
@@ -76,6 +84,11 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
+.uploadDate {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #fc0303;
+}
 .imagePlaceholder {
   width: 100%;
   height: 200px;
@@ -123,6 +136,10 @@
     height: 250px;
   }
 
+  .image {
+    height: 250px;
+  }
+
   .cardContent {
     padding: 2rem;
   }
@@ -135,6 +152,10 @@
 /* Desktop Layout */
 @media (min-width: 1024px) {
   .imagePlaceholder {
+    height: 300px;
+  }
+
+  .image {
     height: 300px;
   }
 
