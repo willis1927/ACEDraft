@@ -85,7 +85,7 @@ function App() {
       const scrollWidth = scrollElement.scrollWidth;
       
       // Trigger when user is within 500px of right edge (for horizontal scroll)
-      if (scrollPosition >= scrollWidth - 500 && nextPageToken && !isLoading) {
+      if (scrollPosition >= scrollWidth - 300 && nextPageToken && !isLoading) {
         loadMoreVideos();
       }
     };
