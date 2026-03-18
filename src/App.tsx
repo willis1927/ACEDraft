@@ -37,7 +37,6 @@ async function getAceNationVidoes(pageToken?: string) {
 
 
 function App() {
-  <Analytics/>
   const [videos, setVideos] = useState<any[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -302,6 +301,7 @@ function App() {
           </div>
         </footer>
       </main>
+      <Analytics />
     </>
   )
 }
