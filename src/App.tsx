@@ -27,7 +27,7 @@ async function getAceNationVidoes(pageToken?: string) {
   let uploadsPlaylistId = "UUTfW_DZQZCIujgV_nBA13IA";
   
   const pageParam = pageToken ? `&pageToken=${pageToken}` : '';
-  const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${uploadsPlaylistId}&maxResults=8&key=${apiKey}${pageParam}`;
+  const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${uploadsPlaylistId}&maxResults=10&key=${apiKey}${pageParam}`;
   
   const res = await fetch(url);
   const data = await res.json();
@@ -45,12 +45,18 @@ function App() {
   const gridRef = useRef<HTMLDivElement>(null);
 
   const loadMoreVideos = async () => {
-    if (isLoading || !nextPageToken) return;
+    if (isLoading || !nextPageToken || videos.length >= 50) return;
     setIsLoading(true);
     try {
       const data = await getAceNationVidoes(nextPageToken);
-      setVideos(prev => [...prev, ...data.items]);
-      setNextPageToken(data.nextPageToken);
+      const newVideos = [...videos, ...data.items].slice(0, 50); // Limit to 50 total
+      setVideos(newVideos);
+      // Stop pagination if we've reached 50 videos
+      if (newVideos.length >= 50) {
+        setNextPageToken(null);
+      } else {
+        setNextPageToken(data.nextPageToken);
+      }
     } catch (error) {
       console.error('Error loading more videos:', error);
     } finally {
