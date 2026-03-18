@@ -3,7 +3,7 @@ import { Navbar, Section, Card } from './components'
 import './App.css'
 import BackgroundEffect from './BackgroundEffect'
 import { useEffect, useState, useRef } from 'react'
-
+import { Analytics } from "@vercel/analytics/react"
 
 function getRelativeTime(publishedAt: string): string {
   const now = new Date();
@@ -37,7 +37,7 @@ async function getAceNationVidoes(pageToken?: string) {
 
 
 function App() {
-
+  <Analytics/>
   const [videos, setVideos] = useState<any[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,7 +84,7 @@ function App() {
       const scrollPosition = scrollElement.scrollLeft + scrollElement.clientWidth;
       const scrollWidth = scrollElement.scrollWidth;
       
-      // Trigger when user is within 500px of right edge (for horizontal scroll)
+      // Trigger when user is within 300px of right edge (for horizontal scroll)
       if (scrollPosition >= scrollWidth - 300 && nextPageToken && !isLoading) {
         loadMoreVideos();
       }
