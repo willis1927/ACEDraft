@@ -38,7 +38,7 @@ async function getAceNationVidoes(pageToken?: string) {
 
 function App() {
 
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState<any[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);

@@ -7,6 +7,7 @@ interface CardProps {
   description: string
   image?: string
   cta?: { text: string; href: string }
+  uploadDate?: string
 }
 
 export function Card({ title, description, image, cta, uploadDate }: CardProps) {
